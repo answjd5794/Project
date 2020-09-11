@@ -3,28 +3,63 @@ package bookStore;
 import java.util.List;
 import java.util.Map;
 
+public interface IDao {
+	
+	int createMember(MemberVO mvo);
 
-public interface  IDao {
+
+	int dupleId(String mem_id);
 
 
-   List<BooksVO> booKList();
+	String logIn(Map<String, String> params);
 
-   String managerlogIn(Map<String, String> params);
 
-   int createBook(BooksVO bvo);
+	int passUpdate(Map<String, String> params);
 
-   List<MemberVO> memList();
 
-   List<ReviewVO> reviewContent();
+	int nameUpdate(Map<String, String> params);
 
-   int memDrop();
 
-   int createMember(MemberVO mvo);
+	int add1Update(Map<String, String> params);
 
-   int dupleId(String mem_id);
 
-   List<BooksVO> showIT();
+	int add2Update(Map<String, String> params);
 
-   
-   
+
+	int phoneUpdate(Map<String, String> params);
+
+	List<BooksVO> itList(BooksVO bvo);
+
+
+	List<BooksVO> historyList(BooksVO bvo);
+
+
+	List<BooksVO> SportsList(BooksVO bvo);
+
+
+	List<BooksVO> booKList();
+
+
+	List<MemberVO> memList();
+
+	String login(Map<String, String> params);
+
+	String managerlogIn(Map<String, String> params);
+
+	List<OrdersVO> orderList();
+
+	List<RefundVO> refundList();
+
+	int bookDelete(BooksVO bvo);
+
+	String bookCreate(BooksVO bvo);
+
+	String bookEdit(BooksVO bvo);
+
+
+	
+	
+
+	
+	
 }

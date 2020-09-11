@@ -11,27 +11,27 @@ import java.util.regex.Pattern;
 
 public class ViewClass {
 
-	private IService service = new IServiceImpl();
+   private IService service = new IServiceImpl();
 
-	BooksVO bvo = new BooksVO();
-	CartVO cavo = new CartVO();
-	ManagerVO mavo = new ManagerVO();
-	MemberVO mvo = new MemberVO();
-	OrdersVO ovo = new OrdersVO();
-	RefundVO rvo = new RefundVO();
-	// 카테고리
-	final String IT = "IT";
-	final String HISTORY = "History";
-	final String SPORTS = "Sports";
+   BooksVO bvo = new BooksVO();
+   CartVO cavo = new CartVO();
+   ManagerVO mavo = new ManagerVO();
+   MemberVO mvo = new MemberVO();
+   OrdersVO ovo = new OrdersVO();
+   RefundVO rvo = new RefundVO();
+   // 카테고리
+   final String IT = "IT";
+   final String HISTORY = "History";
+   final String SPORTS = "Sports";
 
-	/**
-	 * 서점 관리 프로그램 초기 화면
-	 * 
-	 * @author 이선엽
-	 * @since 2020.09.07
-	 */
+   /**
+    * 서점 관리 프로그램 초기 화면
+    * 
+    * @author 이선엽
+    * @since 2020.09.07
+    */
 
-	public void startMethod() {
+   public void startMethod() {
 		while (true) {
 			System.out.println("┌───────────────────────────────┐");
 			System.out.println("│    강선철 서점에 오신것을 환영합니다\t│");
@@ -64,13 +64,16 @@ public class ViewClass {
 
 			case 3:
 				// 프로그램 종료
-				System.out.println("종료");
 				System.exit(0);
+				break;
+			default:
+				System.out.println("번호를 다시 입력하세요");
+				break;
 			}
 		}
 	}
 
-	/**
+   /**
 	 * 회원가입 메서드
 	 * 
 	 * @method createMember
@@ -186,17 +189,14 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 8:25:18
 	 */
 	private String inputPass() {
-		// sql
-		String mempass = mvo.getMem_pass();
-		int inputPass = service.inputPass(mempass);
-
 		// 1. 비밀번호 입력 받기
 		while (true) {
 			try {
 				Scanner scan = new Scanner(System.in);
 				System.out.println("영문,숫자,특수문자 _*로만 이루어진 5 ~ 12자 이하로 생성해주세요.");
-				System.out.println("비밀 번호 : ");
+				System.out.print("비밀 번호 : ");
 				String mem_pass = scan.next();
+				mvo.setMem_pass(mem_pass);
 
 				Pattern p = Pattern.compile("^[a-zA-Z]{1}[a-zA-Z0-9_*]{4,11}$");
 				Matcher m = p.matcher(mem_pass);
@@ -221,16 +221,14 @@ public class ViewClass {
 	 */
 
 	private String inputName() {
-		// sql
-		String memname = mvo.getMem_name();
-		int inputName = service.inputName(memname);
-
 		while (true) {
 			try {
 				// 1. 이름 입력 받기
 				Scanner scan = new Scanner(System.in);
-				System.out.println("이름 : ");
-				String mem_name = scan.nextLine();
+				System.out.print("이름 : ");
+				String mem_name = scan.next();
+				mvo.setMem_name(mem_name);
+
 				// 2. 이름 정규식 확인
 				Pattern p = Pattern.compile("^[가-힣]+$");
 				Matcher m = p.matcher(mem_name);
@@ -257,20 +255,15 @@ public class ViewClass {
 	 */
 
 	private String inputAdd1() {
-		// sql
-		String memadd1 = mvo.getMem_add1();
-		int inputAdd1 = service.inputAdd1(memadd1);
-
 		while (true) {
 			try {
 				Scanner scan = new Scanner(System.in);
 				String mem_add1 = null;
-				System.out.println();
 				System.out.println("주소 입력 화면입니다.");
 				// System.out.println("XX시 XX구 XX동의 형식으로 적어주세요. (시, 구, 동 필수 표기 필수)");
-				System.out.println();
 				// 1. 주소 입력 받기
 				mem_add1 = scan.nextLine();
+				mvo.setMem_add1(mem_add1);
 				// 2. 주소 정규식 확인
 				Pattern p = Pattern
 						.compile("^[가-힣]+[(도||광역시)]\\s[가-힣]+[(시||군||구)]\\s[가-힣]+[(읍||면||동||군||구)]"
@@ -293,60 +286,51 @@ public class ViewClass {
 	}
 
 	/**
-	 * 회원가입 기입항목 5.고객의 상세주소 저장 메서드 sql
+	 * 회원가입 기입항목 5.고객의 상세주소 저장 메서드
 	 * 
 	 * @return 가입이 완료된 고객의 상세 주소를 반환
 	 * @author 이선엽
 	 */
 
 	private String inputAdd2() {
-		// sql
-		String memadd2 = mvo.getMem_add2();
-		int inputAdd2 = service.inputAdd2(memadd2);
-
 		Scanner scan = new Scanner(System.in);
 		String mem_add2 = null;
 		System.out.println("상세 주소 입력 화면입니다. XX동 이하의 세부 주소를 적어주세요.");
-		System.out.println();
 		System.out
 				.println("상세 주소를 잘못 입력할 시 배달이 정상적으로 진행되지 않을 수 있으며, 이 경우 발생하는 모든 문제는 고객의 책임이 됩니다.");
 		System.out.println();
 		mem_add2 = scan.nextLine();
+		mvo.setMem_add2(mem_add2);
+
 		return mem_add2;
 	}
 
 	/**
-	 * 회원가입 기입항목 6.고객의 휴대폰 번호 저장 메서드 sql
+	 * 회원가입 기입항목 6.고객의 휴대폰 번호 저장 메서드
 	 * 
 	 * @return 고객의 휴대폰 번호를 반환
 	 * @author 이선엽
 	 */
 
 	private String inputPhone() {
-		// sql
-		String memphone = mvo.getMem_phone();
-		int inputPhone = service.inputPhone(memphone);
-
 		while (true) {
 			try {
 				Scanner scan = new Scanner(System.in);
 				System.out.println("휴대폰 번호 입력 화면입니다.");
-				System.out.println();
 				System.out
 						.println("휴대폰 번호를 XXX-XXXX-XXXX 형식에 맞추어 입력해주세요. (숫자만 입력 가능, '-' 없이 입력 가능");
-				System.out.println();
 				// 1. 휴대폰 번호 입력 받기
-				String mem_phone = scan.nextLine();
+				String mem_phone = scan.next();
+				mvo.setMem_phone(mem_phone);
+
 				// 2. 휴대폰 정규식 확인
 				Pattern p = Pattern
 						.compile("^01(?:0|1|[6-9])[.-]?([1-9]{1}\\d{2}|[1-9]{1}\\d{3})[.-]?(\\d{4})$");
 				Matcher m = p.matcher(mem_phone);
 				if (m.matches() == true) {
-					System.out.println("회원가입이 완료되었습니다.");
 					return mem_phone;
 				} else {
 					System.out.println("형식이 일치하지 않습니다. 확인하고 다시 입력해주세요.");
-					System.out.println();
 				}
 			} catch (InputMismatchException e) {
 				System.out.println("올바르지 않은 입력입니다. 확인하고 다시 입력해주세요.");
@@ -397,62 +381,80 @@ public class ViewClass {
 	}
 
 	/**
-	 * 회원의 로그인 메서드
+	 * 회원의 로그인 메서드 sql
 	 * 
 	 * @author 이선엽
 	 * @since 2020.09.07
 	 */
 
 	private void memberLogin() {
+
 		Scanner scan = new Scanner(System.in);
+		String logIn_id = null;
 		System.out.println("┌───────────────────────────────┐");
 		System.out.println("│    아이디와 비밀번호를 입력하세요\t│");
 		System.out.println("└───────────────────────────────┘");
-		System.out.println();
-		System.out.println("아이디 : ");
-		String mem_id = inputLogID();
-		System.out.println("비밀번호 : ");
+
+		String mem_id = inputLogId();
 		String mem_pass = inputLogPs();
 
-		Map<String, String> memLo = new HashMap<>();
-		memLo.put("mem_id", mem_id);
-		memLo.put("mem_pass", mem_pass);
+		Map<String, String> params = new HashMap<>();
+		params.put("mem_id", mem_id);
+		params.put("mem_pass", mem_pass);
 
-		// 로그인 후 이동
-		System.out.println();
-		System.out.println("============   임시 로그인이 성공했습니다.   ============");
-		System.out.println();
-		afterLogin();
-		// 로그인이 성공했으면 로그인 메뉴로 넘어간다.
-		// 로그인이 실패했으면 다시 입력받도록 한다.
+		logIn_id = service.logIn(params);
+
+		if (logIn_id == null) {
+			System.out.println("아이디와 비밀번호가 일치하지 않습니다.");
+		} else {
+			System.out.println(logIn_id + "님 어서오세요.");
+			afterLogin();
+		}
 	}
 
 	/**
 	 * 로그인용 ID 기입 메서드
 	 * 
 	 * @return 가입이 완료된 고객의 아이디 반환
-	 * @author 이선엽
+	 * @author 서대철
+	 * @since 2020.09.10
 	 */
-	private String inputLogID() {
-		// 구현
-		return null;
+	private String inputLogId() {
+		// sql
+		// SELETE FROM MEMBER WHERE MEM_ID = '';
+		Scanner scan = new Scanner(System.in);
+		System.out.print("아이디 : ");
+		String mem_id = scan.next();
+
+		while (true) {
+			if (service.dupleId(mem_id) == 1) {
+				return mem_id;
+			} else {
+				System.out.println("등록된 아이디가 없습니다.");
+			}
+		}
+
 	}
 
 	/**
 	 * 로그인용 비밀번호 기입 메서드
 	 * 
 	 * @method inputLogPs
-	 * @return String
-	 * @author 이선엽
+	 * @return DB에 있는 아이디와 비교해서 같은 아이디가 있으면 비밀번호를 반환
+	 * @author 서대철
 	 * @since 2020. 9. 9.오후 8:22:11
 	 */
 
 	private String inputLogPs() {
-		// 비밀번호를 올바르게 입력할 시
-		// System.out.println("로그인에 성공했습니다.");
-		// afterLogin();
-		// 구현
-		return null;
+		// sql
+		// SELECT mem_pass FROM MEMBER
+		// WHERE MEM_ID = mem_id;
+		Scanner scan = new Scanner(System.in);
+		System.out.print("비밀번호 : ");
+		String mem_pass = scan.next();
+
+		return mem_pass;
+
 	}
 
 	/**
@@ -473,9 +475,8 @@ public class ViewClass {
 			System.out.print(" 2. 장바구니 조회  ");
 			System.out.print(" 3. 내 주문 내역 관리  ");
 			System.out.println(" 4. 개인정보 변경 ");
-			System.out.println();
 			System.out.print("         5. 내 포인트 관리   ");
-			System.out.print("           0. 로그아웃");
+			System.out.println("           0. 로그아웃");
 
 			int input = 0;
 			// 입력값 변수타입의 범위를 초과했을 때 예외처리
@@ -501,7 +502,7 @@ public class ViewClass {
 
 				case 4:
 					// 개인정보 변경 메서드 호출
-					memUpdatePass();
+					memUpdate();
 					break;
 
 				case 5:
@@ -516,7 +517,6 @@ public class ViewClass {
 				}
 
 			} catch (InputMismatchException e) {
-				System.out.println();
 				System.out.println("입력이 올바르지 않습니다.");
 			}
 		}
@@ -535,8 +535,6 @@ public class ViewClass {
 		// sql
 		// 반환타입, 메서드명, 매개변수
 		// int memberLogOut(String mem_id);
-		String mem = mvo.getMem_id();
-		int memLogOut = service.memLogOut(mem);
 	}
 
 	/**
@@ -581,7 +579,6 @@ public class ViewClass {
 				}
 
 			} catch (InputMismatchException e) {
-				System.out.println();
 				System.out.println("입력이 올바르지 않습니다.");
 			}
 		}
@@ -597,10 +594,6 @@ public class ViewClass {
 	 */
 
 	private void pointCharge() {
-
-		int mem = mvo.getMem_point();
-		int pointCharge = service.pointCharge(mem);
-
 		while (true) {
 			Scanner scan = new Scanner(System.in);
 			service.pointCharge(mvo);
@@ -665,8 +658,8 @@ public class ViewClass {
 		System.out.println("┌───────────────────────────┐");
 		System.out.println("│\t      내 포인트 조회\t    │");
 		System.out.println("└───────────────────────────┘");
-		return list;
 
+		return list;
 	}
 
 	/**
@@ -678,8 +671,7 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 9:11:19
 	 */
 	private void pointChargeInput() {
-		// sql
-		//
+
 	}
 
 	/**
@@ -733,37 +725,21 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 4:05:29
 	 */
 
-	private void showIT() {
-		List<BooksVO> showIT = service.showIT();
-		System.out.println("\t\tIT서적 내역 입니다.");
-		if (showIT.isEmpty() == true) {
-			System.out.println("\t서적이 존재하지 않습니다.");
-		} else {
-			for (BooksVO bvo : showIT) {
-				System.out.print(bvo.getBook_id() + " ");
-				System.out.print(bvo.getBook_name() + " ");
-				System.out.print(bvo.getBook_pub_name() + " ");
-				System.out.print(bvo.getBook_price() + " ");
-				System.out.print(bvo.getBook_writer());
-				System.out.println();
-			}
-			orderIT();
-		}
+	private List<BooksVO> showIT() {
+		System.out.println("┌───────────────────────────┐");
+		System.out.println("│\t      IT서적\t    │");
+		System.out.println("└───────────────────────────┘");
+		// sql
+		// SELECT book_name
+		// FROM BOOKS
+		// WHERE book_category = 'History';
+		// 반환타입, 매개변수, 메서드명
+		// BookVO에서 카테고리 컬럼이 IT인것만 조회
 
-	}
-	/**
-	 * IT 서적을 주문할 수 있는 메서드
-	 * @method orderIT
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 11.오전 1:08:06
-	 */
-	private void orderIT() {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("주문하시고자 하는 서적의 코드를 입력해주세요.");
-		int order = scan.nextInt();
-		int result = service.orderIT(bvo);
-		
+		List<BooksVO> list = new ArrayList<>();
+		list = service.itList(bvo);
+
+		return list;
 	}
 
 	/**
@@ -775,19 +751,22 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 4:05:29
 	 */
 
-	private void showHistory() { // 조회
+	private List<BooksVO> showHistory() {
+		System.out.println("┌───────────────────────────┐");
+		System.out.println("│\t      역사서적\t    │");
+		System.out.println("└───────────────────────────┘");
 		// sql
-		// SELECT book_id ,book_name
+		// SELECT book_name
 		// FROM BOOKS
 		// WHERE book_category = 'History';
 		// 반환타입, 매개변수, 메서드명
 		// BookVO에서 카테고리 컬럼이 History인것만 조회
-		// List<BooksVO> itList = new ArrayList<>();
-		// itList = service.itList();
-		//
-		// for (int i = 0; i < itList.size(); i++) {
-		//
-		// }
+		// List<String> History(book_category);
+
+		List<BooksVO> list = new ArrayList<>();
+		list = service.HistoryList(bvo);
+
+		return list;
 	}
 
 	/**
@@ -799,7 +778,10 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 4:05:29
 	 */
 
-	private void showSports() {
+	private List<BooksVO> showSports() {
+		System.out.println("┌───────────────────────────┐");
+		System.out.println("│\t      스포츠서적\t    │");
+		System.out.println("└───────────────────────────┘");
 		// sql
 		// SELECT book_name
 		// FROM BOOKS
@@ -807,7 +789,9 @@ public class ViewClass {
 		// 반환타입, 매개변수, 메서드명
 		// BookVO에서 카테고리 컬럼이 History인것만 조회
 		// List<Strin> list =
-		// Map<Integer, String> sportsList = service.sportsList();
+		List<BooksVO> list = new ArrayList<>();
+		list = service.SportsList(bvo);
+		return list;
 	}
 
 	/**
@@ -860,6 +844,7 @@ public class ViewClass {
 			// INSERT INTO CART
 			// VALUES (bvo);
 			// 장바구니 선택하면 장바구니에 담기는 메서드
+			// int bucketInput(bvo);
 			System.out.println("┌───────────────────────────┐");
 			System.out.println("│\t      장바구니 내역\t    │");
 			System.out.println("└───────────────────────────┘");
@@ -869,7 +854,7 @@ public class ViewClass {
 			for (CartVO cvo : list) {
 				System.out.println(cvo.getCart_id());
 			}
-			cartSelect();
+
 			return list;
 		}
 	}
@@ -916,13 +901,20 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 12:47:39
 	 */
 
-	private int cartOrder() {
+	private void cartOrder() {
 		// sql
 		// 반환타입, 메서드명, 매개변수
-		String cart = cavo.getCart_id();
-		int cartOrder = service.cartOrder(cart);
-		return cartOrder;
+		// int cartOrder(CartVO cavo);
 	}
+
+	/**
+	 * 서적 주문/장바구니에 담기
+	 * 
+	 * @method bucketInput
+	 * @return void
+	 * @author 강문정
+	 * @since 2020. 9. 9.오후 1:54:56
+	 */
 
 	/**
 	 * 장바구니 내역에서 일괄 삭제하는 메서드
@@ -942,7 +934,9 @@ public class ViewClass {
 		// m.put("book_id", book_id);
 		// m.put("cart_id", cart_id);
 		String member = mvo.getMem_id();
+
 		int deleteCart = service.deleteCart(member);
+
 		return deleteCart;
 	}
 
@@ -958,14 +952,12 @@ public class ViewClass {
 	private void deleteChoice() {
 		// sql
 		// DELETE CART
-		// WHERE cart_id ="+ "cart_id"
+		// WHERE cart_id = "cart_id"
 		// 반환타입, 메서드명, 매개변수
-		String member = mvo.getMem_id();
-		int deleteCart = service.deleteCart(member);
-
+		// List<String> deleteChoice(CartVO cavo);
 		while (true) {
-			Scanner sc = new Scanner(System.in);
-			int cart_id = sc.nextInt();
+			Scanner scan = new Scanner(System.in);
+			int cart_id = scan.nextInt();
 			int result = service.deleteChoice(cart_id);
 			if (result > 0) {
 				System.out.println("삭제되었습니다");
@@ -988,7 +980,8 @@ public class ViewClass {
 	private void orderInfo() {
 		while (true) {
 			System.out.println("1. 주문 내역 조회");
-			System.out.println("2. 뒤로 가기");
+			System.out.println("2. 반품 신청하기");
+			System.out.println("3. 뒤로 가기");
 
 			int input = 0;
 			try {
@@ -1001,10 +994,14 @@ public class ViewClass {
 					break;
 
 				case 2:
+					// 일괄 반품 신청을 위한 메서드
+					sellList();
+					return;
+
+				case 3:
 					System.out.println("이전 화면으로 이동합니다.");
 					System.out.println();
 					return;
-
 				}
 			} catch (InputMismatchException e) {
 				System.out.println();
@@ -1022,32 +1019,26 @@ public class ViewClass {
 	 * @since 2020. 9. 9.오후 2:07:25
 	 */
 
-	private List<String> buyList() {
+	private void buyList() {
 		System.out.println("┌───────────────────────────┐");
 		System.out.println("│\t      주문   내역\t    │");
 		System.out.println("└───────────────────────────┘");
-		List<String> list = new ArrayList<>();
-		list = service.buyList();
-		// return list;
-		// return list인데 case 리턴에 오류나서 일단 오류 잡아놓음
-		// 수정 해야됨
+
+		// sql
+		// 주문 내역 조회를 위한 메서드
+		// List<String> buyList(OrdersVO ovo);
 
 		while (true) {
-			System.out.println("1. 반품 신청하기");
 			System.out.println("0. 뒤로 가기");
 			int input = 0;
 			try {
 				Scanner scan = new Scanner(System.in);
 				input = scan.nextInt();
 				switch (input) {
-				case 1:
-					// 반품신청하는 메서드
-					sellList();
-
 				case 0:
 					System.out.println();
 					System.out.println("이전 화면으로 이동합니다.");
-					return list;
+					return;
 				}
 			} catch (InputMismatchException e) {
 				System.out.println();
@@ -1070,14 +1061,12 @@ public class ViewClass {
 		while (true) {
 			System.out.println();
 			System.out.println("반품 신청 화면입니다.");
-			System.out.println("반품을 원하시는 주문번호를 입력해주세요.");
+			System.out.println("원하시는 항목을 선택해주세요.");
 
 			// sql
 			// Map<String, String> m = new HashMap<>();
 			// m.put("book_id", book_id);
 			// m.put("refund_id", refund_id);
-			String order = ovo.getOrder_id();
-			int sellList = service.sellList(order);
 
 			int input = 0;
 			try {
@@ -1101,48 +1090,6 @@ public class ViewClass {
 	}
 
 	/**
-	 * 회원의 개인정보 변경 전 비밀번호가 맞는지 확인하는 메소드 회원이 입력한 비밀번호와 회원 계정의 비밀번호가 맞는지 판별해서 맞으면
-	 * 1 아니면 0을 반환
-	 * 
-	 * @method memUpdatePass
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 2:23:18
-	 */
-
-	private void memUpdatePass() {
-		// sql
-		String mem = mvo.getMem_pass();
-		int memUpdatePass = service.memUpdatePass(mem);
-
-		while (true) {
-			String mem_pass = null;
-			try {
-				System.out
-						.println("┌────────────────────────────────────────────┐");
-				System.out.println("│\t\t      비밀 번호 확인  \t\t     │");
-				System.out
-						.println("└────────────────────────────────────────────┘");
-				System.out.println(" ** 개인정보처리방침에 따라 비밀번호를 한번 더 입력해주세요 **");
-
-				Scanner scan = new Scanner(System.in);
-				// sql
-				// 회원의 개인정보 변경 전 비밀번호가 맞는지 확인하는 메소드
-				// 회원이 입력한 비밀번호와 회원 계정의 비밀번호가 맞는지 판별해서
-				// 맞으면 1 아니면 0을 반환
-				String uppass = mvo.getMem_pass();
-				int updatepass = service.memUpdatePass(uppass);
-
-				System.out.print("비밀번호 : ");
-				System.out.println("");
-			} catch (InputMismatchException e) {
-				e.printStackTrace();
-				System.out.println("번호 입력이 올바르지 않습니다.");
-			}
-		}
-	}
-
-	/**
 	 * 개인정보 변경을 위한 메서드 회원의 ID빼고 모두 변경이 가능함
 	 * 
 	 * @method memUpdate
@@ -1155,7 +1102,6 @@ public class ViewClass {
 		// sql
 		// memverVO에 있는 개인정보를 ID빼고 변경
 		// int memUpdate(MemberVO mv);
-
 		System.out.println("┌────────────────────────────────────────────┐");
 		System.out.println("│\t\t      개인 정보 변경  \t\t     │");
 		System.out.println("└────────────────────────────────────────────┘");
@@ -1195,7 +1141,7 @@ public class ViewClass {
 
 		case 5:
 			// 5.전화번호변경
-			tel2Update();
+			phoneUpdate();
 			break;
 
 		case 6:
@@ -1213,697 +1159,750 @@ public class ViewClass {
 	/**
 	 * 회원 화면의 4.개인 정보 변경 -1 비밀번호 변경 구현 메서드
 	 * 
-	 * @author 이선엽
+	 * @author 서대철
 	 * @since 2020.09.07
 	 */
 
-	private void passUpdate() {
-		inputPass();
+	private int passUpdate() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("아이디 입력 : ");
+		String mem_id = scan.next();
+		System.out.print("변경할 비밀번호 : ");
+		String mem_pass = scan.next();
+		Map<String, String> params = new HashMap<>();
+		params.put("mem_id", mem_id);
+		params.put("mem_pass", mem_pass);
+
+		int result = service.passUpdate(params);
+
+		if (result != 0) {
+			System.out.println("비밀번호 변경이 성공하였습니다.");
+		} else {
+			System.out.println("비밀번호 변경이 실패했습니다.");
+		}
+
+		return result;
 	}
 
 	/**
 	 * 회원 화면의 4.개인 정보 변경 -2 이름 변경 구현 메서드
 	 * 
-	 * @author 이선엽
+	 * @author 서대철
 	 * @since 2020.09.07
 	 */
 
-	private void nameUpdate() {
-		inputName();
+	private int nameUpdate() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("아이디 입력 : ");
+		String mem_id = scan.next();
+		System.out.print("변경할 이름 : ");
+		String mem_name = scan.next();
+
+		Map<String, String> params = new HashMap<>();
+		params.put("mem_id", mem_id);
+		params.put("mem_name", mem_name);
+
+		int result = service.nameUpdate(params);
+
+		if (result != 0) {
+			System.out.println("이름 변경이 성공하였습니다.");
+		} else {
+			System.out.println("이름 변경이 실패했습니다.");
+		}
+
+		return result;
 	}
 
 	/**
 	 * 회원 화면의 4.개인 정보 변경 -3 주소 변경 구현 메서드
 	 * 
-	 * @author 이선엽
+	 * @author 서대철
 	 * @since 2020.09.07
 	 */
 
-	private void add1Update() {
-		inputAdd1();
+	private int add1Update() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("아이디 입력 : ");
+		String mem_id = scan.next();
+		System.out.print("변경할 주소 : ");
+		String mem_add1 = scan.nextLine();
+
+		Map<String, String> params = new HashMap<>();
+		params.put("mem_id", mem_id);
+		params.put("mem_add1", mem_add1);
+
+		int result = service.add1Update(params);
+
+		if (result != 0) {
+			System.out.println("주소 변경이 성공하였습니다.");
+		} else {
+			System.out.println("주소 변경이 실패했습니다.");
+		}
+
+		return result;
 	}
 
 	/**
 	 * 회원 화면의 4.개인 정보 변경 -4 상세 주소 변경 구현 메서드
 	 * 
-	 * @author 이선엽
+	 * @author 서대철
 	 * @since 2020.09.07
 	 */
 
-	private void add2Update() {
-		inputAdd2();
+	private int add2Update() {
+		Scanner scan = new Scanner(System.in);
+		System.out.print("아이디 입력 : ");
+		String mem_id = scan.next();
+		System.out.print("변경할 상세주소 : ");
+		String mem_add2 = scan.next();
+
+		Map<String, String> params = new HashMap<>();
+		params.put("mem_id", mem_id);
+		params.put("mem_add2", mem_add2);
+
+		int result = service.add2Update(params);
+
+		if (result != 0) {
+			System.out.println("상세주소 변경이 성공하였습니다.");
+		} else {
+			System.out.println("상세주소 변경이 실패했습니다.");
+		}
+
+		return result;
 	}
 
 	/**
 	 * 회원 화면의 4.개인 정보 변경 -5 휴대폰 번호 변경 구현 메서드
 	 * 
-	 * @author 이선엽
+	 * @author 서대철
 	 * @since 2020.09.07
 	 */
 
-	private void tel2Update() {
-		inputPhone();
-	}
-
-	// 로그인 성공이라는 메서드를 완성했다고 가정하고 1번 누르면 밑에 출력문이 실행된다.
-	// 관리자로그인 메서드
-	// sql
-	// String managerLogin(Map<String, String> params);
-
-	private void managerLogin() {
+	private int phoneUpdate() {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("┌───────────────────────────────┐");
-		System.out.println("│    아이디와 비밀번호를 입력하세요\t│");
-		System.out.println("└───────────────────────────────┘");
+		System.out.print("아이디 입력 : ");
+		String mem_id = scan.next();
+		System.out.print("변경할 전화번호 : ");
+		String mem_phone = scan.next();
 
-		System.out.println();
-		System.out.println("아이디를 입력해주세요.");
-		String manager_id = scan.nextLine();
-		System.out.println();
-		System.out.println("비밀번호를 입력해주세요.");
-		String manager_pass = scan.nextLine();
+		Map<String, String> params = new HashMap<>();
+		params.put("mem_id", mem_id);
+		params.put("mem_pass", mem_phone);
 
-//		String managerLogin_id;
-//
-//		Map<String, String> maLo = new HashMap<>();
-//		maLo.put("manager_id", manager_id);
-//		maLo.put("manager_pass", manager_pass);
+		int result = service.phoneUpdate(params);
 
-//		managerLogin_id = service.managerLogin(maLo);
-//		if (managerLogin_id != null) {
-//			System.out.println();
-//			System.out.println("관리자 로그인에 성공했습니다.");
-//			managerAfterLogin();
-//
-//		} else {
-//			System.out.println("유효하지 않는 계정입니다. 아이디와 비밀번호를 확인 후 다시 입력해주세요.");
-//		}
-		// 로그인이 성공했으면 로그인 메뉴로 넘어간다.
-		// 로그인이 실패했으면 다시 입력받도록 한다.
-		managerAfterLogin();
-	}
-
-	/**
-	 * 관리자 로그인 PASS 입력 메서드
-	 * 
-	 * @author 강문정
-	 * @return
-	 */
-
-	private String managerLoginID() {
-		while (true) {
-			try {
-				// sql
-				Scanner scan = new Scanner(System.in);
-				System.out.print("아이디 : ");
-				String manager_id = scan.nextLine();
-
-				if (manager_id == null) {
-					System.out.println("관리자 아이디가 일치하지 않습니다.");
-					System.out.println("확인 후 다시 입력해주세요.");
-					return manager_id;
-				} else {
-					System.out.println("비밀번호를 입력해주세요.");
-					managerLoginPass();
-				}
-
-			} catch (InputMismatchException e) {
-				System.out.println("다시 입력해주세요.");
-			}
-		}
-	}
-
-	private String managerLoginPass() {
-		while (true) {
-			try {
-				// sql
-				Scanner scan = new Scanner(System.in);
-				System.out.print("비밀번호 : ");
-				String manager_pass = scan.nextLine();
-				if (manager_pass == null) {
-					System.out.println();
-					System.out.println("관리자 비밀번호가 일치하지 않습니다.");
-					System.out.println("확인 후 다시 입력해주세요.");
-					return manager_pass;
-				} else {
-					System.out.println();
-					System.out.println("로그인에 성공했습니다.");
-					managerAfterLogin();
-				}
-
-			} catch (InputMismatchException e) {
-				System.out.println("다시 입력해주세요.");
-			}
-		}
-	}
-
-	private void managerAfterLogin() {
-		while (true) {
-			System.out.println("┌───────────────────────────────┐");
-			System.out.println("│            관리자 모드         \t│");
-			System.out.println("│───────────────────────────────│");
-			System.out.println("│\t       메뉴를 고르세요\t\t│");
-			System.out.println("└───────────────────────────────┘");
-			System.out.println("1. 주문 관리");
-			System.out.println("2. 서적 관리");
-			System.out.println("3. 회원 관리");
-			System.out.println("4. 뒤로 가기");
-
-			int input = 0;
-			// 입력값 변수타입의 범위를 초과했을 때 예외처리
-			try {
-				Scanner scan = new Scanner(System.in);
-				input = scan.nextInt();
-			} catch (InputMismatchException e) {
-				System.out.println("입력이 올바르지 않습니다.");
-				continue;
-			}
-			switch (input) {
-			case 1:
-				// 관리자 주문 관리 메서드
-				orderManage();
-				break;
-
-			case 2:
-				// 관리자 서적 관리 메서드
-				bookManage();
-				break;
-
-			case 3:
-				// 관리자 회원 관리 메서드
-				memberManage();
-				break;
-
-			case 0:
-				// 뒤로가기
-				return;
-			}
-		}
-	}
-
-	// 관리자모드 회원 정보 관리 메소드
-
-	private void memberManage() {
-		while (true) {
-			try {
-				System.out.println("┌───────────────────────────────┐");
-				System.out.println("│    관리할 항목을 고르세요\t        │");
-				System.out.println("└───────────────────────────────┘");
-				System.out.println("1. 회원 정보 조회");
-				System.out.println("2. 탈퇴 회원 관리");
-
-				int input = 0;
-				try {
-					Scanner scan = new Scanner(System.in);
-					input = scan.nextInt();
-				} catch (InputMismatchException e) {
-					e.printStackTrace();
-					System.out.println("입력이 올바르지 않습니다.");
-					continue;
-				}
-				switch (input) {
-				case 1:
-					// 회원 정보 조회 메서드
-					memList();
-					break;
-
-				case 2:
-					// 탈퇴 회원 비활성화 시키는 메서드
-					memDrop();
-					break;
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("다시 입력해주세요.");
-			}
-		}
-	}
-
-	// 회원의 정보를 모두 조회하는 메서드
-
-	private void memList() {
-		List<MemberVO> memList = service.memList();
-		System.out
-				.println("┌──────────────────────────────────────────────────┐");
-		System.out
-				.println("│아이디   \t이름 \t 주소   \t상세주소   \t핸드폰    \t포인트             │");
-		System.out
-				.println("└──────────────────────────────────────────────────┘");
-
-		if (memList.isEmpty() == true) {
-			System.out.println("\t\t회원이 존재하지 않습니다.");
+		if (result != 0) {
+			System.out.println("전화번호 변경이 성공하였습니다.");
 		} else {
-			for (MemberVO mvo : memList) {
-				System.out.print(mvo.getMem_id() + " ");
-				System.out.print(mvo.getMem_name() + " ");
-				System.out.print(mvo.getMem_add1() + " ");
-				System.out.print(mvo.getMem_add2() + " ");
-				System.out.print(mvo.getMem_phone() + " ");
-				System.out.print(mvo.getMem_point() + " ");
-				System.out.println();
-			}
+			System.out.println("전화번호 변경이 실패했습니다.");
 		}
 
+		return result;
 	}
+   // 로그인 성공이라는 메서드를 완성했다고 가정하고 1번 누르면 밑에 출력문이 실행된다.
+   // 관리자로그인 메서드
+   // sql
+   // String managerLogin(Map<String, String> params);
 
-	// 탈퇴 회원 비활성화 시키는 메서드
-	private void memDrop() {
-		while (true) {
-			System.out.println("비활성화 할 계정의 ID를 입력해주세요");
-			Scanner scan = new Scanner(System.in);
-			String mem_id = scan.next();
+   private void managerLogin() {
+      Scanner scan = new Scanner(System.in);
+      System.out.println("┌───────────────────────────────┐");
+      System.out.println("│    아이디와 비밀번호를 입력하세요\t│");
+      System.out.println("└───────────────────────────────┘");
+      
+      System.out.println();
+      System.out.println("아이디를 입력해주세요.");
+      String manager_id = scan.nextLine();
+      System.out.println();
+      System.out.println("비밀번호를 입력해주세요.");
+      String manager_pass = scan.nextLine();
+      
+      String managerLogin_id;
+      
+//      Map<String, String> maLo = new HashMap<>();
+//      maLo.put("manager_id", manager_id);
+//      maLo.put("manager_pass", manager_pass);
+//      
+//      managerLogin_id = service.managerLogin(maLo);
+//      if(managerLogin_id != null){
+//    	  System.out.println();
+//    	  System.out.println("관리자 로그인에 성공했습니다.");
+    	  managerAfterLogin();
+//    	  
+//      }else{
+//    	  System.out.println("유효하지 않는 계정입니다. 아이디와 비밀번호를 확인 후 다시 입력해주세요.");
+//      }
+//      // 로그인이 성공했으면 로그인 메뉴로 넘어간다.
+//      // 로그인이 실패했으면 다시 입력받도록 한다.
 
-			mvo.setMem_id(mem_id);
-			int result = service.memDrop(mvo);
-			if (result == 1) {
-				System.out.println("비활성화 되었습니다.");
-			} else {
-				System.out.println("비활성화 되지 않았습니다.");
-			}
-			return;
-		}
+   }
+
+   private void managerAfterLogin() {
+      while (true) {
+         System.out.println("┌───────────────────────────────┐");
+         System.out.println("│            관리자 모드         \t│");
+         System.out.println("│───────────────────────────────│");
+         System.out.println("│\t       메뉴를 고르세요\t\t│");
+         System.out.println("└───────────────────────────────┘");
+         System.out.println("1. 주문 관리");
+         System.out.println("2. 서적 관리");
+         System.out.println("3. 회원 관리");
+         System.out.println("4. 뒤로 가기");
+
+         int input = 0;
+         // 입력값 변수타입의 범위를 초과했을 때 예외처리
+         try {
+            Scanner scan = new Scanner(System.in);
+            input = scan.nextInt();
+         } catch (InputMismatchException e) {
+            System.out.println("입력이 올바르지 않습니다.");
+            continue;
+         }
+         switch (input) {
+         case 1:
+            // 관리자 주문 관리 메서드
+            orderManage();
+            break;
+
+         case 2:
+            // 관리자 서적 관리 메서드
+            bookManage();
+            break;
+
+         case 3:
+            // 관리자 회원 관리 메서드
+            memberManage();
+            break;
+
+         case 0:
+            // 뒤로가기
+            return;
+         }
+      }
+   }
+
+   // 관리자모드 회원 정보 관리 메소드
+
+   private void memberManage() {
+      while (true) {
+         try {
+            System.out.println("┌───────────────────────────────┐");
+            System.out.println("│    관리할 항목을 고르세요\t        │");
+            System.out.println("└───────────────────────────────┘");
+            System.out.println("1. 회원 정보 조회");
+            System.out.println("2. 탈퇴 회원 관리");
+
+            int input = 0;
+            try {
+               Scanner scan = new Scanner(System.in);
+               input = scan.nextInt();
+            } catch (InputMismatchException e) {
+               e.printStackTrace();
+               System.out.println("입력이 올바르지 않습니다.");
+               continue;
+            }
+            switch (input) {
+            case 1:
+               // 회원 정보 조회 메서드
+               memList();
+               break;
+
+            case 2:
+               // 탈퇴 회원 비활성화 시키는 메서드
+               memDrop();
+               break;
+            }
+         } catch (InputMismatchException e) {
+            System.out.println("다시 입력해주세요.");
+         }
+      }
+   }
+
+   // 회원의 정보를 모두 조회하는 메서드
+
+   private List<MemberVO> memList() {
+      // sql
+      // 반환타입, 메서드명, 매개변수
+      List<MemberVO> list = new ArrayList<>();
+      list = service.memList();
+      return list;
+   }
+
+   // 탈퇴 회원 비활성화 시키는 메서드
+   private String memDrop() {
+      return null;
+      // sql
+      // 반환타입, 메서드명, 매개변수
+      // int MemDrop(MemberVO mvo)
+//      int memDrop();
+      //?????????????????????????????
+   }
+
+   // 관리자모드 서적관리 메소드
+   private void bookManage() {
+      while (true) {
+         System.out.println();
+         System.out.println("관리자 모드 서적 관리 화면입니다.");
+         System.out.println();
+         System.out.println("┌───────────────────────────────┐");
+         System.out.println("│    번호를 입력하세요\t        │");
+         System.out.println("└───────────────────────────────┘");
+         System.out.println("1. 서적 등록");
+         System.out.println("2. 서적 수정");
+         System.out.println("3. 한줄평 조회");
+         System.out.println("0. 뒤로 가기");
+
+         int input = 0;
+         try {
+            Scanner scan = new Scanner(System.in);
+            input = scan.nextInt();
+         } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("입력이 올바르지 않습니다.");
+            continue;
+         }
+         switch (input) {
+         case 1:
+            // 관리자 서적 등록
+            bookRegit();
+            break;
+
+         case 2:
+            // 관리자 서적 조회
+            bookList();
+            break;
+
+         case 3:
+            // 관리자 한줄평 전체 조회
+            reviewList();
+            break;
+
+         case 0:
+            return;
+         }
+      }
+   }
+
+   /**
+    * 서적 등록을 위한 메서드
+    * 
+    * @method bookRegit
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 4:16:47
+    */
+
+   private void bookRegit() {
+      while (true) {
+         System.out.println("┌───────────────────────────────┐");
+         System.out.println("│    신규 서적 등록\t        │");
+         System.out.println("└───────────────────────────────┘");
+         System.out.println("1. IT");
+         System.out.println("2. History");
+         System.out.println("3. Sports");
+         System.out.println("0. 뒤로 가기");
+
+         int input = 0;
+         try {
+            Scanner scan = new Scanner(System.in);
+            input = scan.nextInt();
+            switch (input) {
+            case 1:
+               // IT서적 등록
+               itRegit();
+               break;
+
+            case 2:
+               // 역사 서적 등록
+               historyRegit();
+               break;
+
+            case 3:
+               // 스포츠 서적 등록
+               sportsRegit();
+               break;
+
+            case 0:
+               return;
+
+            }
+         } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("입력이 올바르지 않습니다.");
+            continue;
+         }
+      }
+   }
+
+   /**
+    * 서적 등록을 위한 메서드 복합체
+    * 
+    * @method bookCreate
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 5:47:47
+    */
+
+   private void bookCreate() {     
+         nameinp();
+         pubnameinp();
+         writterinp();
+         pubdateinp();
+         categoryinp();
+         priceinp();
+         
+         service.bookCreate(bvo);
+   }
+   /**
+    * 서적 수정을 위한 메서드 복합체
+    * @method bookDelete
+    * @return void
+    * @author 이선엽
+    * @since 2020. 9. 10.오후 7:54:05
+    */
+   
+   private void bookEdit() {
+	   editName();
+       nameinp();
+       pubnameinp();
+       writterinp();
+       pubdateinp();
+       categoryinp();
+       priceinp();
+       
+       System.out.println("수정하실 책의 이름을 입력해주세요.");
+       service.bookEdit(bvo);
+ }
+
+   private void editName() {
+	Scanner scan = new Scanner(System.in);
+	System.out.println("서적 이름 입력:");
+	String input = scan.nextLine();
+	bvo.setBook_name(input);
+   }
+
+private void nameinp() {
+      Scanner sc = new Scanner(System.in);
+      System.out.println("서적 이름 입력:");
+      String input = sc.nextLine();
+      bvo.setBook_name(input);
+   }
+
+   private void pubnameinp() {
+      Scanner scan = new Scanner(System.in);
+      System.out.println(" 출판사 명 입력:");
+      String input = scan.nextLine();
+      bvo.setBook_pub_name(input);
+   }
+
+   private void writterinp() {
+      Scanner scan = new Scanner(System.in);
+      System.out.println(" 저자 입력:");
+      String input = scan.nextLine();
+      bvo.setBook_writer(input);
+   }
+
+   private void pubdateinp() {
+      Scanner scan = new Scanner(System.in);
+      System.out.println(" 출판일 입력:");
+      String input = scan.nextLine();
+      bvo.setBook_pub_date(input);
+   }
+   
+   private void categoryinp() {
+	  Scanner scan = new Scanner(System.in);
+	  System.out.println(" 카테고리 입력:");
+	  String input = scan.nextLine();
+	  bvo.setBook_category(input);
+}
+   private void priceinp(){
+	   Scanner scan = new Scanner(System.in);
+	   System.out.println(" 가격 입력:");
+	   int input = scan.nextInt();
+	   bvo.setBook_price(input);
+   }
+
+/**
+    * 역사 서적 등록 메서드 P1001
+    * 
+    * @method historyRegit
+    * @return void
+    * @author 이선엽
+    * @since 2020. 9. 9.오후 6:29:42
+    */
+   private void historyRegit() {
+	   bookCreate();
+   }
+
+   /**
+    * 스포츠 서적 등록 메서드 P2001
+    * 
+    * @method historyRegit
+    * @return void
+    * @author 이선엽
+    * @since 2020. 9. 9.오후 6:29:42
+    */
+   private void sportsRegit() {
+	   bookCreate();
+   }
+
+   /**
+    * IT 서적 등록 메서드 P3001
+    * 
+    * @method historyRegit
+    * @return void
+    * @author 이선엽
+    * @since 2020. 9. 9.오후 6:29:42
+    */
+   private void itRegit() {
+//      inputBook();
+	   bookCreate();
+   }
+
+   private void bookList() {
+      // sql
+      // 책 조회할때 책의 모든 VO를 가지고 와서 목록에 조회함
+      // List<String> bookList(BookVO bvo);
+      List<String> list = new ArrayList<>();
+      list = service.bookList(bvo);
+      while (true) {
+         System.out.println("┌───────────────────────────────┐");
+         System.out.println("│    항목을 선택하세요\t        │");
+         System.out.println("└───────────────────────────────┘");
+         System.out.println("1. 서적 수정");
+         System.out.println("2. 서적 삭제");
+         System.out.println("0. 뒤로 가기");
+
+         int input = 0;
+         try {
+            Scanner scan = new Scanner(System.in);
+            input = scan.nextInt();
+         } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("입력이 올바르지 않습니다.");
+            continue;
+         }
+
+         switch (input) {
+         case 1:
+            // 서적 수정
+            bookUpdate();
+            break;
+         case 2:
+        	 bookDelete();
+            // 서적 삭제
+            break;
+         case 0:
+            return;
+         }
+      }
+   }
+
+   /**
+    * 서적을 카테고리별로 수정할 수 있는
+    * 
+    * @method bookUpdate
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 4:47:41
+    */
+
+   private void bookUpdate() {
+      
+      while (true) {
+         System.out.println("┌───────────────────────────────┐");
+         System.out.println("│    카테고리를 선택하세요\t        │");
+         System.out.println("└───────────────────────────────┘");
+         System.out.println("1. IT");
+         System.out.println("2. History");
+         System.out.println("3. Sports");
+         System.out.println("0. 뒤로 가기");
+
+         int input = 0;
+         try {
+            Scanner scan = new Scanner(System.in);
+            input = scan.nextInt();
+         } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("입력이 올바르지 않습니다.");
+            continue;
+         }
+         switch (input) {
+         case 1:
+            // IT서적 수정
+            itUpdate();
+            break;
+
+         case 2:
+            // 역사 서적 수정
+            historyUpdate();
+            break;
+
+         case 3:
+            // 스포츠 서적 수정
+            sportsUpdate();
+            break;
+
+         case 0:
+            return;
+         }
+      }
+   }
+
+   /**
+    * IT서적 수정 메서드 P10001
+    * 
+    * @method itUpdate
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 4:50:47
+    */
+
+   private void itUpdate() {
+      bookEdit();
+   }
+
+   /**
+    * 역사 서적 수정 메서드 P20001
+    * 
+    * @method itUpdate
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 4:50:47
+    */
+
+   private void historyUpdate() {
+      bookEdit();
+   }
+
+   /**
+    * 스포츠 서적 등록 메서드
+    * 
+    * @method itUpdate
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 4:50:47
+    */
+
+   private void sportsUpdate() {
+	   bookEdit();
+   }
+
+   /**
+    * 서적 삭제 메서드
+    * 
+    * @method bookDelete
+    * @return void
+    * @author 이선엽
+    * @since 2020. 9. 9.오후 6:39:36
+    */
+
+   private int bookDelete() {
+	   Scanner scan = new Scanner(System.in);
+       System.out.println("삭제를 원하는 서적명을 입력해주세요.");
+       String input = scan.nextLine();
+       int delete = service.bookDelete(bvo);
+       bvo.setBook_name(input);
+       if(input != bvo.getBook_name()){
+    	   System.out.println("입력이 올바르지 않습니다.");
+       }else{
+    	   System.out.println("삭제되었습니다.");
+       }
+       return delete;
+   }
+
+   // 관리자모드 서적관리 메소드 - 한줄평 조회
+   private List<String> reviewList() {
+      System.out.println();
+      System.out.println("카테고리별 한줄평 조회 화면입니다.");
+      // sql
+      // 반환타입, 메서드명, 매개변수
+      List<String> list = new ArrayList<>();
+      list = service.reviewList(ovo);
+      return list;
+   }
+
+   // 관리자모드 주문관리 메소드
+   private void orderManage() {
+      while (true) {
+         System.out.println();
+         System.out.println("관리자 모드 주문 관리 화면입니다.");
+         System.out.println();
+         System.out.println("┌───────────────────────────────┐");
+         System.out.println("│    번호를 입력하세요\t        │");
+         System.out.println("└───────────────────────────────┘");
+         System.out.println("1. 주문 목록 조회");
+         System.out.println("2. 반품 목록 조회");
+         System.out.println("3. 뒤로 가기");
+
+         int input = 0;
+         try {
+            Scanner scan = new Scanner(System.in);
+            input = scan.nextInt();
+         } catch (InputMismatchException e) {
+            e.printStackTrace();
+            System.out.println();
+            System.out.println("입력이 올바르지 않습니다.");
+            continue;
+         }
+         switch (input) {
+         case 1:
+            // 주문 목록 조회 메서드
+            orderList();
+            break;
+         case 2:
+            // 반품 목록 조회 메서드
+            refundList();
+            break;
+         case 3:
+            return;
+         }
+      }
+   }
+
+   // 관리자모드 주문관리 - 반품 목록 조회
+   private void refundList() {
+      System.out.println();
+      System.out.println("관리자 모드 반품 목록 조회 화면입니다.");
+      List<RefundVO> list = service.refundList();
+      
+      if(list.isEmpty()==true){
+    	  System.out.println();
+    	  System.out.println("반품 신청 목록이 존재하지 않습니다.");
+      }else{
+    	  for (RefundVO rvo : list){
+    		  System.out.println(rvo.getRefund_date());
+    		  System.out.println(rvo.getOrder_id());
+      }
+   }
+   }
+   /**
+    * 관리자가 회원의 주문목록을 전부 조회할 수 있는 메서드
+    * 
+    * @method orderList
+    * @return void
+    * @author 강문정
+    * @since 2020. 9. 9.오후 2:31:57
+    */
+
+   // 관리자모드 주문관리 - 주문 목록 조회
+
+   private void orderList() {
+	   List<OrdersVO> list = service.orderList();
+
+	   if(list.isEmpty()==true){
+		   System.out.println();
+		   System.out.println("주문 내역이 존재하지 않습니다.");
+	   }else{
+		   for (OrdersVO ovo : list) {
+			   System.out.println(ovo.getOrder_id());
+			   System.out.println(ovo.getOrder_date());
+			   System.out.println(ovo.getOrder_qty());
+			   System.out.println(ovo.getCart_id());
+			   System.out.println(ovo.getMem_id());
+	   }
 	}
+//	   cartSelect();
 
-	// 관리자모드 서적관리 메소드
-	private void bookManage() {
-		while (true) {
-			System.out.println();
-			System.out.println("관리자 모드 서적 관리 화면입니다.");
-			System.out.println();
-			System.out.println("┌───────────────────────────────┐");
-			System.out.println("│    번호를 입력하세요\t        │");
-			System.out.println("└───────────────────────────────┘");
-			System.out.println("1. 서적 등록");
-			System.out.println("2. 서적 조회");
-			System.out.println("3. 한줄평 조회");
-			System.out.println("0. 뒤로 가기");
-
-			int input = 0;
-			try {
-				Scanner scan = new Scanner(System.in);
-				input = scan.nextInt();
-			} catch (InputMismatchException e) {
-				System.out.println();
-				System.out.println("입력이 올바르지 않습니다.");
-				continue;
-			}
-			switch (input) {
-			case 1:
-				// 관리자 서적 등록
-				// bookRegit();
-				break;
-
-			case 2:
-				// 관리자 서적 조회
-				bookList();
-				break;
-
-			case 3:
-				// 관리자 한줄평 전체 조회
-				reviewList();
-				break;
-
-			case 0:
-				return;
-			}
-		}
-	}
-
-	/**
-	 * 서적 등록을 위한 메서드
-	 * 
-	 * @method bookRegit
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 4:16:47
-	 */
-
-	// private void bookRegit() {
-	// while (true) {
-	// nameinp();
-	// pubnameinp();
-	// writterinp();
-	// pubdateinp();
-	// categoryinp();
-	// int result= service.createBook(bvo);
-	//
-	// }
-	// }
-
-	/**
-	 * 서적 등록을 위한 메서드
-	 * 
-	 * @method bookCreate
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 5:47:47
-	 */
-
-	// private int codeinp() {
-	// Scanner sc = new Scanner(System.in);
-	// System.out.println(" 서적코드 입력:");
-	// String code = sc.next();
-	// int result = bvo.setBook_id(code);
-	// return result;
-	//
-	// }
-	//
-	// private int nameinp() {
-	// Scanner sc = new Scanner(System.in);
-	// System.out.println(" 서적 이름 입력:");
-	// String name = sc.nextLine();
-	// int result = bvo.setBook_id(name);
-	// return result;
-	// }
-	//
-	// private int pubnameinp() {
-	// Scanner sc = new Scanner(System.in);
-	// System.out.println(" 출판사 명 입력:");
-	// String pubname = sc.nextLine();
-	// int result = bvo.setBook_id(pubname);
-	// return 0;
-	// }
-
-	private int writterinp() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println(" 저자 입력:");
-		String writter = sc.next();
-		bvo.setBook_id(writter);
-		return 0;
-	}
-
-	private int pubdateinp() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println(" 출판일 입력:");
-		String pubdate = sc.next();
-		bvo.setBook_id(pubdate);
-		return 0;
-	}
-
-	/**
-	 * 서적등록 할 때 카테고리 등록하는 메서드
-	 * 
-	 * @method categoryName
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 10.오후 2:38:37
-	 */
-	private void categoryinp() {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("****  IT / History / Sports 중 입력해주세요  ****");
-		System.out.println(" 카테고리 입력:");
-		String categoryinp = sc.next();
-		// 정규식 확인
-		Pattern p = Pattern.compile("[IT||History||Sports]");
-		Matcher m = p.matcher(categoryinp);
-
-		if (m.matches() == true) {
-			bvo.setBook_category(categoryinp);
-		} else {
-			System.out.println("존재하지 않는 카테고리 입니다.");
-		}
-
-	}
-
-	/**
-	 * 역사 서적 등록 메서드 P1001
-	 * 
-	 * @method historyRegit
-	 * @return void
-	 * @author 이선엽
-	 * @since 2020. 9. 9.오후 6:29:42
-	 */
-	// private void historyRegit() {
-	// inputBook();
-	// }
-
-	/**
-	 * 스포츠 서적 등록 메서드 P2001
-	 * 
-	 * @method historyRegit
-	 * @return void
-	 * @author 이선엽
-	 * @since 2020. 9. 9.오후 6:29:42
-	 */
-	// private void sportsRegit() {
-	// inputBook();
-	// }
-
-	/**
-	 * IT 서적 등록 메서드 P3001
-	 * 
-	 * @method historyRegit
-	 * @return void
-	 * @author 이선엽
-	 * @since 2020. 9. 9.오후 6:29:42
-	 */
-	// private void itRegit() {
-	// inputBook();
-	// // 카테고리등록이 IT가 되게 들어가야함
-	//
-	// }
-
-	private void bookList() {
-		List<BooksVO> bookList = service.bookList();
-		System.out.println("┌───────────────────────────────────────┐");
-		System.out.println("│번호\t이름\t출판사\t가격\t저자          │");
-		System.out.println("└───────────────────────────────────────┘");
-
-		if (bookList.isEmpty() == true) {
-			System.out.println("\t서적이 존재하지 않습니다.");
-		} else {
-			for (BooksVO bvo : bookList) {
-				System.out.print(bvo.getBook_id() + " ");
-				System.out.print(bvo.getBook_name() + " ");
-				System.out.print(bvo.getBook_pub_name() + " ");
-				System.out.print(bvo.getBook_price() + " ");
-				System.out.print(bvo.getBook_writer());
-				System.out.println();
-			}
-		}
-		int input = 0;
-		while (true) {
-			System.out.println("┌───────────────────────────────┐");
-			System.out.println("│    항목을 선택하세요\t        │");
-			System.out.println("└───────────────────────────────┘");
-			System.out.println("1. 서적 수정");
-			System.out.println("2. 서적 삭제");
-			System.out.println("0. 뒤로 가기");
-
-			try {
-				Scanner scan = new Scanner(System.in);
-				input = scan.nextInt();
-			} catch (InputMismatchException e) {
-				System.out.println();
-				System.out.println("입력이 올바르지 않습니다.");
-				continue;
-			}
-
-			switch (input) {
-			case 1:
-				// 서적 수정
-				bookUpdate();
-				break;
-			case 2:
-				// 서적 삭제
-				bookDelete();
-				break;
-			case 0:
-				return;
-			}
-		}
-	}
-
-	/**
-	 * 서적을 카테고리별로 수정할 수 있는
-	 * 
-	 * @method bookUpdate
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 4:47:41
-	 */
-
-	private void bookUpdate() {
-
-		while (true) {
-			System.out.println("┌───────────────────────────────┐");
-			System.out.println("│    카테고리를 선택하세요\t        │");
-			System.out.println("└───────────────────────────────┘");
-			System.out.println("1. IT");
-			System.out.println("2. History");
-			System.out.println("3. Sports");
-			System.out.println("0. 뒤로 가기");
-
-			int input = 0;
-			try {
-				Scanner scan = new Scanner(System.in);
-				input = scan.nextInt();
-			} catch (InputMismatchException e) {
-				System.out.println();
-				System.out.println("입력이 올바르지 않습니다.");
-				continue;
-			}
-			switch (input) {
-			case 1:
-				// IT서적 수정
-				// itUpdate();
-				break;
-
-			case 2:
-				// 역사 서적 수정
-				// historyUpdate();
-				break;
-
-			case 3:
-				// 스포츠 서적 수정
-				// sportsUpdate();
-				break;
-
-			case 0:
-				return;
-			}
-		}
-	}
-
-	/**
-	 * IT서적 수정 메서드 P10001
-	 * 
-	 * @method itUpdate
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 4:50:47
-	 */
-
-	// private void itUpdate() {
-	// inputBook();
-	// }
-
-	/**
-	 * 역사 서적 수정 메서드 P20001
-	 * 
-	 * @method itUpdate
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 4:50:47
-	 */
-
-	// private void historyUpdate() {
-	// inputBook();
-	// }
-
-	/**
-	 * 스포츠 서적 등록 메서드
-	 * 
-	 * @method itUpdate
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 4:50:47
-	 */
-	//
-	// private void sportsUpdate() {
-	// inputBook();
-	// }
-
-	/**
-	 * 서적 삭제 메서드
-	 * 
-	 * @method bookDelete
-	 * @return void
-	 * @author 이선엽
-	 * @since 2020. 9. 9.오후 6:39:36
-	 */
-
-	private int bookDelete() {
-		String book = bvo.getBook_id();
-		int bookDelete = service.bookDelete(book);
-		return bookDelete;
-	}
-
-	// 관리자모드 서적관리 메소드 - 한줄평 조회
-	private void reviewList() {
-		List<ReviewVO> reviewList = service.reviewList();
-		System.out.println("┌───────────────────────┐");
-		System.out.println("│      관리자 한줄 평 조회       │");
-		System.out.println("└───────────────────────┘");
-
-		if (reviewList.isEmpty() == true) {
-			System.out.println("한줄평이 존재하지 않습니다.");
-		} else {
-			for (ReviewVO rvo : reviewList) {
-				System.out.print(rvo.getBook_id() + " ");
-				System.out.print(rvo.getReview_contents() + " ");
-				System.out.println();
-			}
-		}
-
-	}
-
-	// 관리자모드 주문관리 메소드
-	private void orderManage() {
-		while (true) {
-			System.out.println();
-			System.out.println("관리자 모드 주문 관리 화면입니다.");
-			System.out.println();
-			System.out.println("┌───────────────────────────────┐");
-			System.out.println("│    번호를 입력하세요\t        │");
-			System.out.println("└───────────────────────────────┘");
-			System.out.println("1. 주문 목록 조회");
-			System.out.println("2. 반품 목록 조회");
-			System.out.println("3. 뒤로 가기");
-
-			int input = 0;
-			try {
-				Scanner scan = new Scanner(System.in);
-				input = scan.nextInt();
-			} catch (InputMismatchException e) {
-				e.printStackTrace();
-				System.out.println();
-				System.out.println("입력이 올바르지 않습니다.");
-				continue;
-			}
-			switch (input) {
-			case 1:
-				// 주문 목록 조회 메서드
-				orderList();
-				break;
-			case 2:
-				// 반품 목록 조회 메서드
-				refundList();
-				break;
-			case 3:
-				return;
-			}
-		}
-	}
-
-	// 관리자모드 주문관리 - 반품 목록 조회
-	private void refundList() {
-		System.out.println();
-		System.out.println("관리자 모드 반품 목록 조회 화면입니다.");
-		// sql
-		// 회원의 주문 목록을 조회
-		// List<String> refundList(RefundVO rvo);
-		List<String> list = new ArrayList<>();
-		list = service.refundList(rvo);
-	}
-
-	/**
-	 * 관리자가 회원의 주문목록을 전부 조회할 수 있는 메서드
-	 * 
-	 * @method orderList
-	 * @return void
-	 * @author 강문정
-	 * @since 2020. 9. 9.오후 2:31:57
-	 */
-
-	// 관리자모드 주문관리 - 주문 목록 조회
-
-	private void orderList() {
-		// sql
-		// 회원의 주문 목록을 조회
-		// List<String> orderList(OrdersVO ovo);
-		List<String> list = new ArrayList<>();
-		list = service.orderList(ovo);
-		System.out.println();
-		System.out.println("관리자 모드 주문 목록 조회 화면입니다.");
-	}
+   }
 }
