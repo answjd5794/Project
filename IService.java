@@ -40,6 +40,10 @@ public interface IService {
 	 */
 	String managerLogin(Map<String, String> params);
 
+	/**
+	 * 
+	 * @param bvo
+	 */
 	void itUpdate(BooksVO bvo);
 
 	/**
@@ -277,7 +281,8 @@ public interface IService {
 	 * @since 2020. 9. 10.오전 1:17:34
 	 */
 	List<MemberVO> memList();
-
+	
+	
 	/**
 	 * 멤버 비밀번호 수정
 	 * 
@@ -300,8 +305,8 @@ public interface IService {
 	 * @author 강문정
 	 * @since 2020. 9. 10.오전 1:32:32
 	 */
-	List<String> bookList(BooksVO bvo);
-	
+//	List<String> bookList(BooksVO bvo);
+
 	/**
 	 * 회원의 비밀번호를 변경하는 메서드
 	 * 
@@ -366,64 +371,9 @@ public interface IService {
 	 */
 	List<BooksVO> SportsList(BooksVO bvo);
 
-	/**
-	 * 서적 주문 조회메서드
-	 * 
-	 * @method orderList
-	 * @param ovo
-	 * @return
-	 * @return List<String>
-	 * @author 강문정
-	 * @since 2020. 9. 10.오전 1:54:42
-	 */
-	List<OrdersVO> orderList();
+	List<BooksVO> bookList();
 
-	/**
-	 * 반품 주문 조회 메서드
-	 * 
-	 * @method refundList
-	 * @param rvo
-	 * @return
-	 * @return List<String>
-	 * @author 강문정
-	 * @since 2020. 9. 10.오전 1:55:14
-	 */
-	List<RefundVO> refundList();
+	List<BooksVO> showIT();
 
-	/**
-	 * 한줄평 조회 메서드
-	 * 
-	 * @method reviewList
-	 * @param ovo
-	 * @return
-	 * @return List<String>
-	 * @author 강문정
-	 * @since 2020. 9. 10.오전 2:02:41
-	 */
-	List<String> reviewList(OrdersVO ovo);
-
-	/**
-	 * 서적 삭제 메서드
-	 * 
-	 * @method bookDelete
-	 * @param book
-	 * @return 완료
-	 * @return int
-	 * @author 강문정
-	 * @since 2020. 9. 10.오전 2:08:47
-	 */
-
-	int bookDelete(BooksVO bvo);
-	/**
-	 * 서적 등록 및 수정을 위한 메서드 복합체
-	 * @method bookCreate
-	 * @return void
-	 * @author 이선엽
-	 * @since 2020. 9. 10.오후 6:39:30
-	 */
-
-	String bookCreate(BooksVO bvo);
-
-	String bookEdit(BooksVO bvo);
 
 }

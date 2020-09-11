@@ -3,346 +3,22 @@ package bookStore;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class IDaoImpl implements IDao {
 	static final String url = "jdbc:oracle:thin:@localhost:1521/XE";
 	static final String id = "SEO";
 	static final String pass = "java";
-	
-	@Override
-	public String managerlogIn(Map<String, String> params) {
-		String manager_id = params.get("manager_id");
-		String manager_pass = params.get("manager_pass");
-		
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		String logIn_ID = null;
-		
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection(url, id, pass);
-			stmt = conn.createStatement();
-			
-			String sql = "SELECT MANAGER_ID "
-					   + "FROM MANAGER "
-					   + "WHERE MANAGER_ID = '" + manager_id + "'"
-					   + " AND MANAGER_PASS = '" + manager_pass + "' ";
-			rs = stmt.executeQuery(sql);
-			while(rs.next()){
-				logIn_ID = rs.getString("MANAGER_ID");
-			}
-			
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩에 실패했습니다.");
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("로딩에 실패했습니다.");
-		
-		} finally {
-			try{
-				if(rs != null){
-					rs.close();
-				}
-				if(stmt != null){
-					stmt.close();
-				}
-				if(conn != null){
-					conn.close();
-				}
-			}catch(SQLException e){
-				System.out.println("반환 실패");
-			}
-		}
-		
-		return logIn_ID;
-	}
-
-
-	@Override
-	public String login(Map<String, String> params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// 주문목록 조회
-	@Override
-	public List<OrdersVO> orderList() {
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		List<OrdersVO> list = new ArrayList<>();
-		try{
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection(url,id,pass);
-			stmt = conn.createStatement();
-			
-			String sql = "SELECT * "
-					+ "FROM ORDERS ";
-			
-			rs = stmt.executeQuery(sql);
-			while(rs.next()){
-				OrdersVO ovo = new OrdersVO();
-				ovo.setOrder_id(rs.getString("ORDER_ID"));
-				ovo.setOrder_date(rs.getString("ORDER_DATE"));
-				ovo.setOrder_qty(rs.getInt("ORDER_QTY"));
-				ovo.setCart_id(rs.getString("CART_ID"));
-				ovo.setMem_id(rs.getString("MEM_ID"));
-				
-				//담아주기
-				list.add(ovo);
-			}
-			
-		}catch(ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패");
-		}catch(SQLException e){
-			System.out.println("로딩 실패");
-		}finally {
-			try{
-				if(stmt != null){
-					stmt.close();
-				}
-				if(conn != null){
-					conn.close();
-				}
-			}catch(SQLException e){
-				System.out.println("자원 반환 실패");
-			}
-		}
-		return list;
-	}
-
-	// 환불조회
-	@Override
-	public List<RefundVO> refundList() {
-		System.out.println();
-		
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		List<RefundVO> list = new ArrayList<>();
-		try{
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection(url,id,pass);
-			stmt = conn.createStatement();
-			
-			String sql = "SELECT * "
-					+ "FROM REFUND ";
-			
-			rs = stmt.executeQuery(sql);
-			while(rs.next()){
-				RefundVO rvo = new RefundVO();
-				rvo.setOrder_id(rs.getString("ORDER_ID"));
-				rvo.setRefund_date(rs.getString("REFUND_DATE"));
-				
-				list.add(rvo);
-				
-				//담아주기
-				list.add(rvo);
-			}
-			
-		}catch(ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패");
-		}catch(SQLException e){
-			System.out.println("로딩 실패");
-		}finally {
-			try{
-				if(stmt != null){
-					stmt.close();
-				}
-				if(conn != null){
-					conn.close();
-				}
-			}catch(SQLException e){
-				System.out.println("자원 반환 실패");
-			}
-		}
-		return list;
-	}
-	
-	
-	//서적삭제
-	@Override
-	public int bookDelete(BooksVO bvo) {
-		String input = bvo.getBook_name();
-
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-
-		int result = 0;
-
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			conn = DriverManager.getConnection(url, id, pass);
-			stmt = conn.createStatement();
-
-			String sql = "DELETE BOOKS "  
-					   + "WHERE BOOK_NAME = '" + input +"' ";
-					
-			stmt.executeUpdate(sql);
-//			 System.out.println(result);
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패");
-		} catch (SQLException e) {
-			System.out.println("로딩 실패");
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("자원 반환 실패");
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public String bookCreate(BooksVO bvo) {
-		String input1 = bvo.getBook_name();
-		String input2 = bvo.getBook_pub_name();
-		String input3 = bvo.getBook_writer();
-		String input4 = bvo.getBook_pub_date();
-		String input5 = bvo.getBook_category();
-		int input6 = bvo.getBook_price();
-		
-		Scanner scan = new Scanner(System.in);
-		
-		Connection conn = null;
-		Statement stmt = null;
-		
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			
-			conn = DriverManager.getConnection(url, id, pass);
-			stmt = conn.createStatement();
-			
-			String sql = "INSERT INTO BOOKS(BOOK_ID, BOOK_NAME, BOOK_PUB_NAME, BOOK_WRITER, BOOK_PUB_DATE, BOOK_PRICE, BOOK_CATEGORY) "
-					+    "VALUES(BOOKS_SEQ.NEXTVAL,'" + input1 +"','" + input2 +"','" + input3 + "','" + input4 + "','" + input6 +"','" + input5+"')";
-			int result = stmt.executeUpdate(sql);
-			
-			if(result != 0){
-				input1 = bvo.getBook_name();
-				input2 = bvo.getBook_pub_name();
-				input3 = bvo.getBook_writer();
-				input4 = bvo.getBook_pub_date();
-			}
-			
-		
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패");
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("로딩 실패");
-		
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("자원 반환 실패");
-			}
-		}
-		return null;
-			
-	}
-
-	@Override
-	public String bookEdit(BooksVO bvo) {
-		String input1 = bvo.getBook_name();
-		String input2 = bvo.getBook_pub_name();
-		String input3 = bvo.getBook_writer();
-		String input4 = bvo.getBook_pub_date();
-		String input5 = bvo.getBook_category();
-		int input6 = bvo.getBook_price();
-		String input7 = bvo.getBook_name();
-		
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		int result = 0;
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		
-			conn = DriverManager.getConnection(url, id, pass);
-			stmt = conn.createStatement();
-			
-			
-			String sql = "UPDATE BOOKS "
-					+    "SET BOOK_ID = BOOKS_SEQ.NEXTVAL, " 
-					+	    " BOOK_NAME = '" + input1 +"',"
-					+	    " BOOK_PUB_NAME = '" + input2 +"',"
-					+       " BOOK_WRITER = '" + input3 +"',"
-					+       " BOOK_PUB_DATE = '" + input4 +"',"
-					+		" BOOK_CATEGORY = '" + input5 +"',"
-					+		" BOOK_PRICE = '" + input6 +"'"
-					+    "WHERE BOOK_NAME = '" + input7 +"'";
-			stmt.executeUpdate(sql);
-		
-			sql = "SELECT BOOKS "
-					+    "SET BOOK_ID = BOOKS_SEQ.NEXTVAL,' " 
-					+	    " BOOK_PUB_NAME = '" + input1 +"'"
-					+       " BOOK_WRITER = '" + input2 +"'"
-					+       " BOOK_PUB_DATE = '" + input3 +"'"
-					+		" BOOK_CATEGORY = '" + input4 +"'"
-					+		" BOOK_PRICE = '" + input5 +"'";
-			rs = stmt.executeQuery(sql);
-			
-//			while(rs.next()){
-//				OrdersVO ovo = new OrdersVO();
-//				ovo.setOrder_id(rs.getString("ORDER_ID"));
-//				ovo.setOrder_date(rs.getString("ORDER_DATE"));
-//				ovo.setOrder_qty(rs.getInt("ORDER_QTY"));
-//				ovo.setCart_id(rs.getString("CART_ID"));
-//				ovo.setMem_id(rs.getString("MEM_ID"));
-//				
-//				//담아주기
-//				list.add(ovo);
-//			}
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패");
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("로딩 실패");
-		
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("자원 반환 실패");
-			}
-		}
-		return null;
-	}
-
-
+	/**
+	 * 회원가입
+	 * @author 서대철
+	 */
 	@Override
 	public int createMember(MemberVO mvo) {
 		Connection con = null;
@@ -398,8 +74,10 @@ public class IDaoImpl implements IDao {
 
 		return result;
 	}
-
-
+	
+	/**
+	 * 중복검사
+	 */
 	@Override
 	public int dupleId(String mem_id) {
 		Connection con = null;
@@ -449,7 +127,6 @@ public class IDaoImpl implements IDao {
 		
 		return result;
 	}
-
 
 	@Override
 	public String logIn(Map<String, String> params) {
@@ -508,8 +185,8 @@ public class IDaoImpl implements IDao {
 		
 		return logIn_id;
 	}
-
-
+	
+	
 	@Override
 	public int passUpdate(Map<String, String> params) {
 		Connection con = null;
@@ -552,7 +229,6 @@ public class IDaoImpl implements IDao {
 		
 		return result;
 	}
-
 
 	@Override
 	public int nameUpdate(Map<String, String> params) {
@@ -597,7 +273,6 @@ public class IDaoImpl implements IDao {
 		return result;
 	}
 
-
 	@Override
 	public int add1Update(Map<String, String> params) {
 		Connection con = null;
@@ -639,7 +314,6 @@ public class IDaoImpl implements IDao {
 		
 		return result;
 	}
-
 
 	@Override
 	public int add2Update(Map<String, String> params) {
@@ -683,7 +357,6 @@ public class IDaoImpl implements IDao {
 		return result;
 	}
 
-
 	@Override
 	public int phoneUpdate(Map<String, String> params) {
 		Connection con = null;
@@ -726,7 +399,58 @@ public class IDaoImpl implements IDao {
 		
 		return result;
 	}
+	
 
+	@Override
+	   public String managerlogIn(Map<String, String> params) {
+	      String manager_id = params.get("manager_id");
+	      String manager_pass = params.get("manager_pass");
+	      
+	      Connection conn = null;
+	      Statement stmt = null;
+	      ResultSet rs = null;
+	      
+	      String logIn_ID = null;
+	      
+	      try {
+	         Class.forName("oracle.jdbc.driver.OracleDriver");
+	         conn = DriverManager.getConnection(url, id, pass);
+	         stmt = conn.createStatement();
+	         
+	         String sql = "SELECT MANAGER_ID "
+	                      + "FROM MANAGER "
+	                     + "WHERE MANAGER_ID = '" + manager_id + "'"
+	                      + " AND MANAGER_PASS = '" + manager_pass + "' ";
+	         rs = stmt.executeQuery(sql);
+	         while(rs.next()){
+	            logIn_ID = rs.getString("MANAGER_ID");
+	         }
+	         
+	      } catch (ClassNotFoundException e) {
+	         System.out.println("드라이버 로딩에 실패했습니다.");
+
+	      } catch (SQLException e) {
+	         e.printStackTrace();
+	         System.out.println("로딩에 실패했습니다.");
+	      
+	      } finally {
+	         try{
+	            if(rs != null){
+	               rs.close();
+	            }
+	            if(stmt != null){
+	               stmt.close();
+	            }
+	            if(conn != null){
+	               conn.close();
+	            }
+	         }catch(SQLException e){
+	            System.out.println("반환 실패");
+	         }
+	      }
+	      
+	      return logIn_ID;
+	   }
 
 	@Override
 	public List<BooksVO> itList(BooksVO bvo) {
@@ -751,7 +475,7 @@ public class IDaoImpl implements IDao {
 			while(rset.next()){
 				bvo.setBook_id(rset.getString("book_id"));
 				bvo.setBook_name(rset.getString("book_name"));
-//				bvo.setBook_date(rset.getString("book_date"));
+				bvo.setBook_date(rset.getString("book_date"));
 				bvo.setBook_price(rset.getShort("book_price"));
 				itList.add(bvo);
 			}
@@ -780,13 +504,11 @@ public class IDaoImpl implements IDao {
 		return null;
 	}
 
-
 	@Override
 	public List<BooksVO> historyList(BooksVO bvo) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	@Override
 	public List<BooksVO> SportsList(BooksVO bvo) {
@@ -794,17 +516,16 @@ public class IDaoImpl implements IDao {
 		return null;
 	}
 
+	
 
-	@Override
-	public List<BooksVO> booKList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public List<MemberVO> memList() {
-		 Connection conn = null;
+	/**
+	    * 관리자 회원목록 조회
+	    * 
+	    * @author 강문정
+	    */
+	   @Override
+	   public List<MemberVO> memList() {
+	      Connection conn = null;
 	      Statement stmt = null;
 	      ResultSet rs = null;
 
@@ -852,5 +573,126 @@ public class IDaoImpl implements IDao {
 	         }
 	      }
 	      return memList;
+	   }
+
+
+	   /**
+	    * 관리자 서적 조회를 위한 메서드 주문목록 빼고
+	    */
+	   @Override
+	   public List<BooksVO> bookList() {
+
+	      Connection conn = null;
+	      Statement stmt = null;
+	      ResultSet rs = null;
+
+	      List<BooksVO> bookList = new ArrayList<BooksVO>();
+
+	      try {
+	         Class.forName("oracle.jdbc.driver.OracleDriver");
+	         conn = DriverManager.getConnection(url, id, pass);
+	         stmt = conn.createStatement();
+
+	         String sql = "SELECT * " + "     FROM  BOOKS";
+
+	         rs = stmt.executeQuery(sql);
+
+	         while (rs.next()) {
+	            BooksVO bvo = new BooksVO();
+	            bvo.setBook_id(rs.getString("BOOK_ID"));
+	            bvo.setBook_name(rs.getString("BOOK_NAME"));
+	            bvo.setBook_pub_name(rs.getString("BOOK_PUB_NAME"));
+	            bvo.setBook_price(rs.getInt("BOOK_PRICE"));
+	            bvo.setBook_writer(rs.getString("BOOK_WRITER"));
+	            bvo.setBook_pub_date(rs.getString("BOOK_PUB_DATE"));
+
+	            // 담아주기
+	            bookList.add(bvo);
+	         }
+
+	      } catch (ClassNotFoundException e) {
+	         e.printStackTrace();
+	         System.out.println("드라이버 로딩 실패");
+	      } catch (SQLException e) {
+	         e.printStackTrace();
+	         System.out.println("로딩실패");
+	      } finally {
+	         try {
+	            if (stmt != null) {
+	               stmt.close();
+	            }
+	            if (conn != null) {
+	               conn.close();
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	            System.out.println("반환실패");
+	         }
+	      }
+	      return bookList;
+	   }
+
+	@Override
+	public List<BooksVO> showIT() {
+
+		
+	      Connection conn = null;
+	      Statement stmt = null;
+	      ResultSet rs = null;
+
+	      List<BooksVO> bookList = new ArrayList<BooksVO>();
+
+	      try {
+	         Class.forName("oracle.jdbc.driver.OracleDriver");
+	         conn = DriverManager.getConnection(url, id, pass);
+	         stmt = conn.createStatement();
+
+	         String sql = "SELECT * " + "     FROM  BOOKS "
+	         			 + "WHERE BOOK_CATEGORY = 'IT'";
+
+	         rs = stmt.executeQuery(sql);
+
+	         while (rs.next()) {
+	            BooksVO bvo = new BooksVO();
+	            bvo.setBook_id(rs.getString("BOOK_ID"));
+	            bvo.setBook_name(rs.getString("BOOK_NAME"));
+	            bvo.setBook_pub_name(rs.getString("BOOK_PUB_NAME"));
+	            bvo.setBook_price(rs.getInt("BOOK_PRICE"));
+	            bvo.setBook_writer(rs.getString("BOOK_WRITER"));
+	            bvo.setBook_pub_date(rs.getString("BOOK_PUB_DATE"));
+
+	            // 담아주기
+	            bookList.add(bvo);
+	         }
+
+	      } catch (ClassNotFoundException e) {
+	         e.printStackTrace();
+	         System.out.println("드라이버 로딩 실패");
+	      } catch (SQLException e) {
+	         e.printStackTrace();
+	         System.out.println("로딩실패");
+	      } finally {
+	         try {
+	            if (stmt != null) {
+	               stmt.close();
+	            }
+	            if (conn != null) {
+	               conn.close();
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	            System.out.println("반환실패");
+	         }
+	      }
+	      return bookList;
+		
 	}
+
+	
+	
+
+	
+
+	
+
 }
