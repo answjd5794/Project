@@ -2,19 +2,10 @@ package bookStore;
 
 public class BooksVO {
 
-	private String book_id;
-	private String book_name;
-	private String book_pub_name;
-	private String book_writer;
-	private String book_pub_date;
-	private String book_date;
-	private int book_price;
-	private String book_category;
-	
-	public String getBook_id() {
+   public int getBook_id() {
 		return book_id;
 	}
-	public void setBook_id(String book_id) {
+	public void setBook_id(int book_id) {
 		this.book_id = book_id;
 	}
 	public String getBook_name() {
@@ -41,12 +32,6 @@ public class BooksVO {
 	public void setBook_pub_date(String book_pub_date) {
 		this.book_pub_date = book_pub_date;
 	}
-	public String getBook_date() {
-		return book_date;
-	}
-	public void setBook_date(String book_date) {
-		this.book_date = book_date;
-	}
 	public int getBook_price() {
 		return book_price;
 	}
@@ -59,6 +44,26 @@ public class BooksVO {
 	public void setBook_category(String book_category) {
 		this.book_category = book_category;
 	}
+	public int getOrder_id() {
+		return order_id;
+	}
+	public void setOrder_id(int order_id) {
+		this.order_id = order_id;
+	}
+private int book_id;
+   private String book_name;
+   private String book_pub_name;
+   private String book_writer;
+   private String book_pub_date;
+   private int book_price;
+   private String book_category;
+   private int order_id;
+   
+   
 
-	
+   
+
+
+
+   
 }

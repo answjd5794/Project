@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class IServiceImpl implements IService {
-	IDao dao = new IDaoImpl();
+	private IDao dao = new IDaoImpl();
 
 	/**
 	 * 회원가입
@@ -33,39 +33,26 @@ public class IServiceImpl implements IService {
 		return mem_id;
 	}
 
-	/**
-	 * 관리자 로그인
-	 * 
-	 * @param params
-	 * @return
-	 * @author 이선엽
-	 * @since 2020.09.10
-	 */
-
 	@Override
 	public String managerLogin(Map<String, String> params) {
-		String manager_id = dao.managerlogIn(params);
-		return manager_id;
-	}
-
-	@Override
-	public void itUpdate(BooksVO bvo) {
-
+		return dao.managerlogIn(params);
 	}
 
 	@Override
 	public List<String> HistoryList() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<String> SportsList() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> bucketInput(BooksVO bvo) {
-		return null;
+	public List<CartVO> bucketInput(BooksVO bvo) {
+		return dao.bucketInput();
 	}
 
 	@Override
@@ -91,10 +78,10 @@ public class IServiceImpl implements IService {
 
 		return dao.dupleId(mem_id);
 	}
-
+	
 	@Override
 	public void pointCharge(MemberVO mvo) {
-
+		
 	}
 
 	@Override
@@ -129,48 +116,103 @@ public class IServiceImpl implements IService {
 
 	@Override
 	public int inputName(String memname) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int inputAdd1(String memadd1) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int inputAdd2(String memadd2) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int inputPhone(String memphone) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int memLogOut(String mem) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int pointCharge(int mem) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public int cartOrder(String cart) {
-		return 0;
-	}
-
-	@Override
-	public int memUpdatePass(int mem) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 //	@Override
-//	public List<String> bookList(BooksVO bvo) {
+//	public List<String> memList() {
+//		// TODO Auto-generated method stub
 //		return null;
 //	}
+
+	@Override
+	public int memUpdatePass(int mem) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<String> bookList(BooksVO bvo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> reviewList(OrdersVO ovo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<OrdersVO> orderList() {
+		return dao.orderList();
+	}
+
+	@Override
+	public List<RefundVO> refundList() {
+		// TODO Auto-generated method stub
+		return dao.refundList();
+	}
+
+	@Override
+	public int bookDelete(BooksVO bvo) {
+		// TODO Auto-generated method stub
+		return dao.bookDelete(bvo);
+	}
+
+	@Override
+	public String bookCreate(BooksVO bvo) {
+		return dao.bookCreate(bvo);
+	}
+
+	@Override
+	public String bookEdit(BooksVO bvo) {
+		// TODO Auto-generated method stub
+		return dao.bookEdit(bvo);
+	}
+
+	@Override
+	public void itUpdate(BooksVO bvo) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public int passUpdate(Map<String, String> params) {
@@ -224,19 +266,12 @@ public class IServiceImpl implements IService {
 	public List<MemberVO> memList() {
 		return dao.memList();
 	}
-
-	@Override
-	public List<BooksVO> bookList() {
-		List<BooksVO> list = dao.bookList();
-		return list;
-	}
-
 	@Override
 	public List<BooksVO> showIT() {
 		List<BooksVO> list = dao.showIT();
 		return list;
 	}
-
-
-
+	
 }
+
+
